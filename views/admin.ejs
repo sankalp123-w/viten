@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  <h1>Admin Dashboard</h1>
+
+  <h2>Users</h2>
+  <% if (users.length > 0) { %>
+    <ul>
+      <% users.forEach(user => { %>
+        <li>
+          <p><%= user.name %> (<%= user.email %>)</p>
+          <form action="/admin/delete-user" method="POST">
+            <input type="hidden" name="userId" value="<%= user._id %>">
+            <button type="submit">Delete User</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No users found.</p>
+  <% } %>
+
+  <h2>Papers</h2>
+  <% if (papers.length > 0) { %>
+    <ul>
+      <% papers.forEach(paper => { %>
+        <li>
+          <h3><%= paper.title %></h3>
+          <p><%= paper.description %></p>
+          <p>Uploaded By: <%= paper.uploadedBy.name %></p>
+          <form action="/admin/delete-paper" method="POST">
+            <input type="hidden" name="paperId" value="<%= paper._id %>">
+            <button type="submit">Delete Paper</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No papers found.</p>
+  <% } %>
+
+  <% if (notifications.length > 0) { %>
+    <h2>Notifications</h2>
+    <ul>
+      <% notifications.forEach(notification => { %>
+        <li><%= notification.message %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

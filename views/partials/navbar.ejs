@@ -1,0 +1,19 @@
+<nav class="bg-indigo-500 py-4">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <a href="/" class="text-white font-bold text-xl">Viten</a>
+    <div class="flex space-x-4">
+        <% if (!user) { %>
+          <a href="/register" class="text-white hover:text-indigo-200">Register</a>
+            <a href="/login" class="text-white hover:text-indigo-200">Login</a>
+          <% } else { %>
+            <a href="/papers" class="text-white hover:text-indigo-200">Papers</a>
+            <a href="/upload" class="text-white hover:text-indigo-200">Upload</a>
+            <% if (user.role === 'admin') { %>
+              <a href="/admin" class="text-white hover:text-indigo-200">Admin</a>
+            <% } %>
+            <a href="/events" class="text-white hover:text-indigo-200">Events</a>
+            <a href="/logout" class="text-white hover:text-indigo-200">Logout</a>
+          <% } %>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload Paper</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet"/>
+  <style>
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+<%- include('partials/navbar') %>
+<div class="container mx-auto py-8">
+  <h1 class="text-3xl font-bold mb-4">Upload Paper</h1>
+  <div class="form-container bg-white rounded-lg shadow-md p-6">
+    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="title" required>
+          Title:
+        </label>
+        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" name="title" type="text" required/>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="type" required>
+          Type:
+        </label>
+        <div class="flex">
+          <div class="mr-4">
+            <input id="type-paper" name="type" type="radio" value="paper" required/>
+            <label class="ml-2" for="type-paper"> Paper </label>
+          </div>
+          <div>
+            <input id="type-assignment" name="type" type="radio" value="assignment" required/>
+            <label class="ml-2" for="type-assignment"> Assignment </label>
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="description" required>
+          Description:
+        </label>
+        <textarea class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description" required></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="file" required>
+          File:
+        </label>
+        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="file" name="file" type="file" accept=".pdf" required/>
+        <small class="text-red-500" id="fileError"></small>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="course" required>
+          Course:
+        </label>
+        <select class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="course" name="course" required>
+          <option value="">Select Course</option>
+          <option value="Btech">B.Tech</option>
+          <option value="MCA">MCA</option>
+          <option value="MBA">MBA</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="semester" required>
+          Semester:
+        </label>
+        <select class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="semester" name="semester" required>
+          <option value="">Select Semester</option>
+          <option value="1">I</option>
+          <option value="2">II</option>
+          <option value="3">III</option>
+          <option value="4">IV</option>
+          <option value="5">V</option>
+          <option value="6">VI</option>
+          <option value="7">VII</option>
+          <option value="8">VIII</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="shift" required>
+          Shift:
+        </label>
+        <div class="flex">
+          <div class="mr-4">
+            <input id="shift-morning" name="shift" type="radio" value="morning" required/>
+            <label class="ml-2" for="shift-morning"> Morning </label>
+          </div>
+          <div>
+            <input id="shift-evening" name="shift" type="radio" value="evening" required/>
+            <label class="ml-2" for="shift-evening"> Evening </label>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="class" value="<%= user.class %>"/>
+      <div class="flex justify-center">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Upload
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  function validateForm() {
+    var fileInput = document.getElementById('file');
+    var fileSize = fileInput.files[0].size; // in bytes
+    var maxSize = 4 * 1024 * 1024; // 4 MB
+    var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+
+    if (fileSize > maxSize) {
+      document.getElementById('fileError').innerText = "File size exceeds 4 MB limit.";
+      return false;
+    }
+
+    if (fileExtension !== 'pdf') {
+      document.getElementById('fileError').innerText = "Only PDF files are allowed.";
+      return false;
+    }
+
+    return true;
+  }
+</script>
+</body>
+</html>

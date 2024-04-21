@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Papers</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <%- include('partials/navbar') %>
+    <div class="container mx-auto px-4 py-8">
+      <form action="/search" method="GET" class="mb-6">
+        <div class="flex">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search papers..."
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <button
+            type="submit"
+            class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+      <h1 class="text-3xl font-bold mb-4">Papers</h1>
+      <% if (papers.length > 0) { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <% papers.forEach(paper => { %>
+        <div class="bg-white rounded-lg shadow-md p-4">
+          <h2 class="text-xl font-bold mb-2"><%= paper.title %></h2>
+          <p class="text-gray-600"><%= paper.description %></p>
+          <p class="text-gray-600">Uploaded By: <%= paper.uploadedBy.name %></p>
+          <p class="text-gray-600">Type: <%= paper.type %></p>
+          <p class="text-gray-600">Semester: <%= paper.semester %></p>
+          <p class="text-gray-600">Course: <%= paper.course %></p>
+          <a
+            href="/papers/<%= paper._id %>/download"
+            class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded mt-4"
+            >Download</a
+          >
+        </div>
+        <% }) %>
+      </div>
+      <div class="mt-8 flex justify-center">
+        <% if (currentPage > 1) { %>
+        <a
+          href="/papers?page=<%= currentPage - 1 %>"
+          class="mr-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+          >Previous</a
+        >
+        <% } %> <% for (let i = 1; i <= totalPages; i++) { %>
+        <a
+          href="/papers?page=<%= i %>"
+          class="mr-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded <%= i === currentPage ? 'bg-gray-700' : '' %>"
+          ><%= i %></a
+        >
+        <% } %> <% if (currentPage < totalPages) { %>
+        <a
+          href="/papers?page=<%= currentPage + 1 %>"
+          class="ml-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+          >Next</a
+        >
+        <% } %>
+      </div>
+      <% } else { %>
+      <p>No papers found.</p>
+      <% } %>
+    </div>
+  </body>
+</html>

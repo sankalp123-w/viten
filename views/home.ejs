@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Viten</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <style>
+      .main {
+        background-image: url('https://media.giphy.com/media/1oBwBVLGoLteCP2kyD/giphy.gif?cid=790b7611cuh1nycw6vynku61c0lyf6avx8towhhg9xibs8j2&ep=v1_gifs_search&rid=giphy.gif&ct=g');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: contain;
+
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <% include('partials/navbar') %>
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex flex-col items-center">
+        <h1
+          class="text-4xl md:text-6xl font-bold text-gray-800 mb-4 text-center animate__animated animate__fadeInDown"
+        >
+          Welcome to Viten
+        </h1>
+        <p
+          class="text-lg md:text-xl text-gray-600 mb-8 text-center animate__animated animate__fadeInUp animate__delay-1s"
+        >
+          Your one-stop destination for all your academic needs.
+        </p>
+      </div>
+
+      <% if (user) { %>
+      <div
+        class="main bg-transparent rounded-lg  p-6 animate__animated animate__fadeInUp animate__delay-2s shadow-md"
+      >
+      <p class="text-3xl mb-10 font-bold text-black-900 text-center">Hello, <%= user.name %></p>
+        <div class="flex flex-wrap justify-center">
+          <a
+            href="/logout"
+            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded m-2 transition-colors duration-300"
+            >Logout</a
+          >
+          <a
+            href="/papers"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2 transition-colors duration-300"
+            >View Papers</a
+          >
+          <a
+            href="/upload"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded m-2 transition-colors duration-300"
+            >Upload Paper</a
+          >
+          <% if (user.role === 'admin') { %>
+          <a
+            href="/admin"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded m-2 transition-colors duration-300"
+            >Admin Dashboard</a
+          >
+          <% } %>
+        </div>
+      </div>
+      <% } else { %>
+      <div
+        class="bg-white rounded-lg shadow-md p-6 animate__animated animate__fadeInUp animate__delay-2s"
+      >
+        <div class="flex justify-center">
+          <a
+            href="/register"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded m-2 transition-colors duration-300"
+            >Register</a
+          >
+          <a
+            href="/login"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2 transition-colors duration-300"
+            >Login</a
+          >
+        </div>
+      </div>
+      <% } %> <% if (notifications.length > 0) { %>
+      <div
+        class="mt-8 bg-white rounded-lg shadow-md p-6 animate__animated animate__fadeInUp animate__delay-3s"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Notifications</h2>
+          <form action="/clear-notifications" method="POST">
+            <button
+              type="submit"
+              class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+            >
+              Clear Notifications
+            </button>
+          </form>
+        </div>
+        <ul class="list-disc pl-4">
+          <% notifications.forEach(notification => { %>
+          <li class="text-gray-700"><%= notification.message %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+    </div>
+
+    <footer>
+      <p class="text-sm">Made by -<a href="https://www.linkedin.com/in/san-jha/" class="underline">Sankalp Jha</a></p>
+    </footer>
+
+    <script>
+      anime({
+        targets: '.animate__animated',
+        translateY: [-50, 0],
+        opacity: [0, 1],
+        easing: 'easeOutQuad',
+        delay: anime.stagger(200),
+      });
+    </script>
+  </body>
+</html>

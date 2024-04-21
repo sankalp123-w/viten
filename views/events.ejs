@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Events</title>
+  <!-- Include Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-gap: 1px;
+      background-color: #ccc;
+    }
+
+    .day {
+      background-color: #fff;
+      padding: 10px;
+      text-align: right;
+      font-size: 14px;
+      position: relative;
+    }
+
+    .event {
+      background-color: #4a5568;
+      color: #fff;
+      padding: 5px;
+      margin-bottom: 5px;
+      border-radius: 3px;
+      font-size: 12px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .event-description {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1;
+      background-color: #333;
+      color: #fff;
+      padding: 5px;
+      border-radius: 3px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .event:hover .event-description {
+      display: block;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <%- include('partials/navbar') %>
+
+  <div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-4">Events</h1>
+
+    <div class="calendar bg-white rounded-lg shadow-md p-4">
+      <!-- Calendar will be rendered here -->
+    </div>
+
+    <div class="mt-8">
+      <a href="/create-event" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Event</a>
+    </div>
+  </div>
+
+  <script>
+    // Define the events data as a JSON object
+    const eventsData = <%- JSON.stringify(events) %>;
+
+    // Get the current month and year
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    // Function to render the calendar
+    function renderCalendar() {
+      const calendarContainer = document.querySelector('.calendar');
+      calendarContainer.innerHTML = '';
+
+      // Render the days of the week
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      daysOfWeek.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+        dayElement.textContent = day;
+        calendarContainer.appendChild(dayElement);
+      });
+
+      // Get the first and last day of the current month
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      // Render the days of the month
+      let day = 1;
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 7; j++) {
+          if (i === 0 && j < firstDay) {
+            // Render empty cells for the previous month's days
+            const dayElement = document.createElement('div');
+            dayElement.classList.add('day');
+            calendarContainer.appendChild(dayElement);
+          } else if (day > lastDay) {
+            // Render empty cells for the next month's days
+            const dayElement = document.createElement('div');
+            dayElement.classList.add('day');
+            calendarContainer.appendChild(dayElement);
+          } else {
+            // Render the current month's day
+            const dayElement = document.createElement('div');
+            dayElement.classList.add('day');
+            dayElement.textContent = day;
+
+            // Render the events for the current day
+            const eventsForDay = eventsData.filter(event => {
+              const eventDate = new Date(event.date);
+              return eventDate.getDate() === day && eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+            });
+
+            eventsForDay.forEach(event => {
+              const eventElement = document.createElement('div');
+              eventElement.classList.add('event');
+              eventElement.textContent = event.title;
+
+              const eventDescriptionElement = document.createElement('div');
+              eventDescriptionElement.classList.add('event-description');
+              eventDescriptionElement.textContent = event.description;
+
+              eventElement.appendChild(eventDescriptionElement);
+              dayElement.appendChild(eventElement);
+            });
+
+            calendarContainer.appendChild(dayElement);
+            day++;
+          }
+        }
+      }
+    }
+
+    // Render the calendar when the page loads
+    document.addEventListener('DOMContentLoaded', renderCalendar);
+  </script>
+</body>
+</html>
