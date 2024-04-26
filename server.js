@@ -36,7 +36,8 @@ const userSchema = new mongoose.Schema({
   course: { type: String, required: true },
   shift: { type: String, required: true },
   semester: { type: String, required: true },
-  class: { type: String, required: true }
+  class: { type: String, required: true },
+  role:{ type: String, required: true }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -119,7 +120,7 @@ app.post('/login', async (req, res) => {
       shift: user.shift,
       semester: user.semester,
       class: user.class,
-      role: 'user' // Set the default role to 'user'
+      role: user.role||"user" // Set the default role to 'user'
     };
 
     res.redirect('/');
